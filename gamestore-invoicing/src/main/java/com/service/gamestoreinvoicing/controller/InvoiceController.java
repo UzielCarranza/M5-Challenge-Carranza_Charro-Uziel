@@ -1,18 +1,25 @@
 package com.service.gamestoreinvoicing.controller;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import com.service.gamestoreinvoicing.feign.GameStoreCatalogClient;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/invoice")
 @CrossOrigin(origins = {"http://localhost:3000"})
 public class InvoiceController {
 
+    @Autowired
+    private final GameStoreCatalogClient gameStoreCatalogClient;
+
+    public InvoiceController(GameStoreCatalogClient gameStoreCatalogClient) {
+        this.gameStoreCatalogClient = gameStoreCatalogClient;
+    }
+
     @GetMapping
-    public void test(){
-        System.out.println("this is a test");
+    public void test() {
+        gameStoreCatalogClient.getTest();
+
     }
 //
 //    @Autowired
