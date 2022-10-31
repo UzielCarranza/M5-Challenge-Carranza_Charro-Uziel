@@ -1,26 +1,16 @@
-package com.trilogyed.gamestore.model;
+package com.service.gamestoreinvoicing.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import javax.persistence.*;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-@Entity
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-@Table(name = "console")
-public class Console implements Serializable {
+public class Console  {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "console_id")
     private long id;
     private String model;
     private String manufacturer;
     private String memoryAmount;
     private String processor;
-    private java.math.BigDecimal price;
+    private BigDecimal price;
     private long quantity;
 
     public long getId() {

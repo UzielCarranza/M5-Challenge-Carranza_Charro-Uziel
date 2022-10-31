@@ -1,20 +1,11 @@
-package com.trilogyed.gamestore.model;
+package com.service.gamestoreinvoicing.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import javax.persistence.*;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-@Entity
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-@Table(name = "tshirt")
-public class TShirt implements Serializable {
+public class TShirt {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "tshirt_id")
     private long id;
     private String size;
     private String color;
