@@ -18,7 +18,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.math.BigDecimal;
 
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -45,9 +45,8 @@ public class ConsoleControllerTest {
 //    global set ups
 
     private ConsoleViewModel inConsole;
-
-
     private ConsoleViewModel outConsole;
+    private ConsoleViewModel updateConsole;
 
     @Before
     public void setUp() {
@@ -73,6 +72,18 @@ public class ConsoleControllerTest {
         outConsole.setPrice(new BigDecimal("199.89"));
         outConsole.setId(15);
 
+        //perform the call, pass argutments (path variables & requestBody), use objectMapper to convert objects
+        // from/to JSON format.
+
+        //Mock "in"coming Console...
+        updateConsole = new ConsoleViewModel();
+        updateConsole.setMemoryAmount("300GB");
+        updateConsole.setQuantity(12);
+        updateConsole.setManufacturer("Sega");
+        updateConsole.setModel("Nintendo II");
+        updateConsole.setProcessor("AMD");
+        updateConsole.setPrice(new BigDecimal("249.99"));
+        updateConsole.setId(15);
 
 
         // the following mocks the service layer's method "createConsoleViewModel"
@@ -87,6 +98,12 @@ public class ConsoleControllerTest {
         // Remember: we are testing the code of the CONTROLLER methods.
         when(consoleService.getConsoleById(15)).thenReturn(outConsole);
 
+
+
+//      shouldReturn204StatusWithGoodUpdate test case uses it
+        //So we are mocking (not executing the service layer) since we are testing the controller here.
+        //Remember: we are testing the code of the CONTROLLER methods.
+        doNothing().when(consoleService).updateConsole(updateConsole);
     }
 
 
@@ -118,55 +135,35 @@ public class ConsoleControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(15));
     }
 
-//    @org.junit.Test
-//    public void shouldReturn204StatusWithGoodUpdate() throws Exception {
-//        //perform the call, pass argutments (path variables & requestBody), use objectMapper to convert objects
-//        // from/to JSON format.
-//
-//        //Mock "in"coming Console...
-//        ConsoleViewModel inConsole = new ConsoleViewModel();
-//        inConsole.setMemoryAmount("300GB");
-//        inConsole.setQuantity(12);
-//        inConsole.setManufacturer("Sega");
-//        inConsole.setModel("Nintendo II");
-//        inConsole.setProcessor("AMD");
-//        inConsole.setPrice(new BigDecimal("249.99"));
-//        inConsole.setId(15);
-//
-//
-//        //So we are mocking (not executing the service layer) since we are testing the controller here.
-//        //Remember: we are testing the code of the CONTROLLER methods.
-//        doNothing().when(storeServiceLayer).updateConsole(inConsole);
-//
-//        mockMvc.perform(
-//                        MockMvcRequestBuilders.put("/console")
-//                                .content(mapper.writeValueAsString(inConsole)) //converts object to JSON and places into RequestBody
-//                                .contentType(MediaType.APPLICATION_JSON))
-//                .andDo(print()) //for debugging purposes. Prints the request, handler,... and response objects to the console below.
-//                .andExpect(status().isNoContent()); //Expected response status code.
-//    }
-//
-//    @org.junit.Test
-//    public void shouldReturn404StatusWithBadIdUpdateRequest() throws Exception {
-//        ConsoleViewModel inConsole = new ConsoleViewModel();
-//        inConsole.setMemoryAmount("300GB");
-//        inConsole.setQuantity(12);
-//        inConsole.setManufacturer("Sega");
-//        inConsole.setModel("Nintendo II");
-//        inConsole.setProcessor("AMD");
-//        inConsole.setPrice(new BigDecimal("249.99"));
-//        inConsole.setId(0);//<--pretend this is a bad id that does not match any existing Console...
-//
-//        //mock call to controller and force an exception
-//        doThrow(new IllegalArgumentException("Console not found. Unable to update")).when(storeServiceLayer).updateConsole(inConsole);
-//
-//        mockMvc.perform(
-//                        MockMvcRequestBuilders.put("/console")
-//                                .content(mapper.writeValueAsString(inConsole)) //converts object to JSON and places into RequestBody
-//                                .contentType(MediaType.APPLICATION_JSON))
-//                .andDo(print()) //for debugging purposes. Prints the request, handler,... and response objects to the console below.
-//                .andExpect(status().isNotFound()); //Expected response status code.
-//    }
+    @Test
+    public void shouldReturn204StatusWithGoodUpdate() throws Exception {
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders.put("/console")
+                                .content(mapper.writeValueAsString(updateConsole)) //converts object to JSON and places into RequestBody
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print()) //for debugging purposes. Prints the request, handler,... and response objects to the console below.
+                .andExpect(status().isNoContent()); //Expected response status code.
+    }
+
+    @Test
+    public void shouldReturn404StatusWithBadIdUpdateRequest() throws Exception {
+
+//      shouldReturn404StatusWithBadIdUpdateRequest test case uses it
+        //mock call to controller and force an exception
+        doThrow(new IllegalArgumentException("Console not found. Unable to update")).when(consoleService).updateConsole(updateConsole);
+
+
+
+//        ARRANGE
+        updateConsole.setId(0);//<--pretend this is a bad id that does not match any existing Console...
+        mockMvc.perform(
+                        MockMvcRequestBuilders.put("/console")
+                                .content(mapper.writeValueAsString(inConsole)) //converts object to JSON and places into RequestBody
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print()) //for debugging purposes. Prints the request, handler,... and response objects to the console below.
+                .andExpect(status().isNotFound()); //Expected response status code.
+    }
 //
 //    @org.junit.Test
 //    public void shouldDeleteConsoleReturnNoContent() throws Exception{
