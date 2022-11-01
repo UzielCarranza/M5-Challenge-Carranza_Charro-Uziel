@@ -146,34 +146,23 @@ public class GameControllerTest {
                 .andDo(print())
                 .andExpect(status().isNoContent());
     }
-//
-//    @Test
-//    public void shouldDeleteGame() throws Exception{
-//        //Object to JSON in String
-//        String inputJson=null;
-//
-//        //Arrange
-//        GameViewModel inGameViewModel = new GameViewModel();
-//        inGameViewModel.setTitle("Halo");
-//        inGameViewModel.setEsrbRating("E10+");
-//        inGameViewModel.setDescription("Puzzles and Math");
-//        inGameViewModel.setPrice(new BigDecimal("23.99"));
-//        inGameViewModel.setStudio("Xbox Game Studios");
-//        inGameViewModel.setQuantity(5);
-//        inGameViewModel.setId(62);
-//
-//        inputJson = mapper.writeValueAsString(inGameViewModel);
-//
-//        //Mock call to service layer...
-//        //Nothing to mock!
-//        //Checking checking for the correct response status code
-//        doNothing().when(storeServiceLayer).deleteGame(62);
-//
-//        //Act & Assert
-//        this.mockMvc.perform(delete("/game/62"))
-//                .andDo(print())
-//                .andExpect(status().isNoContent());
-//    }
+
+    @Test
+    public void shouldDeleteGame() throws Exception{
+
+        //Arrange
+        inGameViewModel.setId(62);
+
+        //Mock call to service layer...
+        //Nothing to mock!
+        //Checking checking for the correct response status code
+        doNothing().when(storeServiceLayer).deleteGame(62);
+
+        //Act & Assert
+        this.mockMvc.perform(delete("/game/62"))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+    }
 //
 //    @Test
 //    public void shouldGetGamesByTitle() throws Exception{
