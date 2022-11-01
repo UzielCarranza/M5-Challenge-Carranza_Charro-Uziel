@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -113,53 +114,38 @@ public class GameControllerTest {
                 //use the objectmapper output with the json method
                 .andExpect(content().json(outputJson));
     }
-//
-//    @Test
-//    public void shouldFailGetGameBadIdReturns404() throws Exception {
-//
-//        String outputJson = null;
-//        long idForGameThatDoesNotExist = 100;
-//
-//        //Arrange
-//        GameViewModel gameViewModel = new GameViewModel();
-//        outputJson = mapper.writeValueAsString(gameViewModel);
-//        when(storeServiceLayer.getGame(idForGameThatDoesNotExist)).thenReturn(null);
-//
-//        //Act & Assert
-//        this.mockMvc.perform(get("/game/" + idForGameThatDoesNotExist))
-//                .andDo(print())
-//                .andExpect(status().isNotFound());
-//    }
-//
-//    @Test
-//    public void shouldUpdateGame() throws Exception{
-//        //Object to JSON in String
-//        String inputJson=null;
-//
-//        //Arrange
-//        GameViewModel inGameViewModel = new GameViewModel();
-//        inGameViewModel.setTitle("Halo");
-//        inGameViewModel.setEsrbRating("E10+");
-//        inGameViewModel.setDescription("Puzzles and Math");
-//        inGameViewModel.setPrice(new BigDecimal("23.99"));
-//        inGameViewModel.setStudio("Xbox Game Studios");
-//        inGameViewModel.setQuantity(5);
-//        inGameViewModel.setId(62);
-//
-//        inputJson = mapper.writeValueAsString(inGameViewModel);
-//
-//        //Mock call to service layer...
-//        //Nothing to mock!
-//        //Checking checking for the correct response status code
-//        doNothing().when(storeServiceLayer).updateGame(inGameViewModel);
-//
-//        //Act & Assert
-//        this.mockMvc.perform(put("/game")
-//                .content(inputJson)
-//                .contentType(MediaType.APPLICATION_JSON))
-//                .andDo(print())
-//                .andExpect(status().isNoContent());
-//    }
+
+    @Test
+    public void shouldFailGetGameBadIdReturns404() throws Exception {
+
+        long idForGameThatDoesNotExist = 100;
+        when(storeServiceLayer.getGame(idForGameThatDoesNotExist)).thenReturn(null);
+
+        //Act & Assert
+        this.mockMvc.perform(get("/game/" + idForGameThatDoesNotExist))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void shouldUpdateGame() throws Exception{
+
+        //Arrange
+        inGameViewModel.setId(1);
+        inGameViewModel.setQuantity(5);
+
+        //Mock call to service layer...
+        //Nothing to mock!
+        //Checking checking for the correct response status code
+        doNothing().when(storeServiceLayer).updateGame(inGameViewModel);
+
+        //Act & Assert
+        this.mockMvc.perform(put("/game")
+                .content(inputJson)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+    }
 //
 //    @Test
 //    public void shouldDeleteGame() throws Exception{
