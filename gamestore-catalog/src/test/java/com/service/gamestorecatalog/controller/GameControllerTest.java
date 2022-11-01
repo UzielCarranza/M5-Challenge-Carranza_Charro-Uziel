@@ -78,6 +78,12 @@ public class GameControllerTest {
         //Mock call to service layer...
         when(storeServiceLayer.createGame(inGameViewModel)).thenReturn(savedGameViewModel);
 
+        // Mocking DAO response
+        // This is another way to mock using mockito
+        // same as doReturn(gameViewModel).when(storeServiceLayer).getGame(8);
+        // We could also set up our mocks in a separate method, if we so chose
+        when(storeServiceLayer.getGame(8)).thenReturn(inGameViewModel);
+
     }
 
     @Test
@@ -99,12 +105,6 @@ public class GameControllerTest {
         inGameViewModel.setId(8);
 
         outputJson = mapper.writeValueAsString(inGameViewModel);
-
-        // Mocking DAO response
-        // This is another way to mock using mockito
-        // same as doReturn(gameViewModel).when(storeServiceLayer).getGame(8);
-        // We could also set up our mocks in a separate method, if we so chose
-        when(storeServiceLayer.getGame(8)).thenReturn(inGameViewModel);
 
         //Act & Assert
         this.mockMvc.perform(get("/game/8"))
