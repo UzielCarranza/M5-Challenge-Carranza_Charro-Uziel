@@ -518,24 +518,24 @@ public class ConsoleControllerTest {
         ;
 
     }
-//    @Test
-//    public void shouldFailGetConsoleByManufacturerWithInvalidManufacturer() throws Exception {
-//
-//        //no need to create dummy data since we are returning null anyway.
-//        List<ConsoleViewModel> consoleViewModelList = new ArrayList<>();
-//
-//        //the following mocks the service layer's method "createConsoleViewModel"
-//        //So we are mocking (not executing the service layer) since we are testing the controller here.
-//        //Remember: we are testing the code of the CONTROLLER methods.
-//        when(storeServiceLayer.getConsoleByManufacturer("Sony")).thenReturn(null);
-//
-//        mockMvc.perform( MockMvcRequestBuilders
-//                        .get("/console/manufacturer/{manufacturer}", "Sony")
-//                        .accept(MediaType.APPLICATION_JSON))
-//                .andDo(print()) //for debugging purposes. Prints the request, handler,... and response objects to the console below.
-//                .andExpect(status().isNotFound())
-//        ;
-//    }
+    @Test
+    public void shouldFailGetConsoleByManufacturerWithInvalidManufacturer() throws Exception {
+
+        //no need to create dummy data since we are returning null anyway.
+        List<ConsoleViewModel> consoleViewModelList = new ArrayList<>();
+
+        //the following mocks the service layer's method "createConsoleViewModel"
+        //So we are mocking (not executing the service layer) since we are testing the controller here.
+        //Remember: we are testing the code of the CONTROLLER methods.
+        when(consoleService.getConsoleByManufacturer("Sony")).thenReturn(null);
+
+        mockMvc.perform( MockMvcRequestBuilders
+                        .get("/console/manufacturer/{manufacturer}", "Sony")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print()) //for debugging purposes. Prints the request, handler,... and response objects to the console below.
+                .andExpect(status().isNotFound())
+        ;
+    }
 
 
 }
