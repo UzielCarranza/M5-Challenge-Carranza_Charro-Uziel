@@ -16,6 +16,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
@@ -48,6 +50,9 @@ public class GameControllerTest {
     private String inputJson;
     private GameViewModel inGameViewModel;
     private GameViewModel savedGameViewModel;
+    private GameViewModel savedGameViewModel2;
+
+   private List<GameViewModel> foundList;
 
     @Before
     public void setUp() throws Exception {
@@ -76,6 +81,19 @@ public class GameControllerTest {
 
         outputJson = mapper.writeValueAsString(savedGameViewModel);
 
+        //Arrange
+        savedGameViewModel2 = new GameViewModel();
+        savedGameViewModel2.setTitle("Gof of War");
+        savedGameViewModel2.setEsrbRating("E10+");
+        savedGameViewModel2.setDescription("Puzzles and Math");
+        savedGameViewModel2.setPrice(new BigDecimal("23.99"));
+        savedGameViewModel2.setStudio("Xbox Game Studios");
+        savedGameViewModel2.setQuantity(5);
+        savedGameViewModel2.setId(51);
+
+        foundList = new ArrayList();
+        foundList.add(savedGameViewModel);
+
         //Mock call to service layer...
         when(storeServiceLayer.createGame(inGameViewModel)).thenReturn(savedGameViewModel);
 
@@ -84,6 +102,10 @@ public class GameControllerTest {
         // same as doReturn(gameViewModel).when(storeServiceLayer).getGame(8);
         // We could also set up our mocks in a separate method, if we so chose
         when(storeServiceLayer.getGame(8)).thenReturn(inGameViewModel);
+
+        when(storeServiceLayer.getGameByTitle("Halo")).thenReturn(foundList);
+
+        when(storeServiceLayer.getGameByTitle("not there")).thenReturn(null);
 
     }
 
@@ -163,62 +185,23 @@ public class GameControllerTest {
                 .andDo(print())
                 .andExpect(status().isNoContent());
     }
+
+    @Test
+    public void shouldGetGamesByTitle() throws Exception{
+
+        outputJson = mapper.writeValueAsString(foundList);
 //
-//    @Test
-//    public void shouldGetGamesByTitle() throws Exception{
-//        //Object to JSON in String
-//        String outputJson = null;
-//
-//        //Arrange
-//        GameViewModel savedGameViewModel1 = new GameViewModel();
-//        savedGameViewModel1.setTitle("Halo");
-//        savedGameViewModel1.setEsrbRating("E10+");
-//        savedGameViewModel1.setDescription("Puzzles and Math");
-//        savedGameViewModel1.setPrice(new BigDecimal("23.99"));
-//        savedGameViewModel1.setStudio("Xbox Game Studios");
-//        savedGameViewModel1.setQuantity(5);
-//        savedGameViewModel1.setId(56);
-//
-//        GameViewModel savedGameViewModel2 = new GameViewModel();
-//        savedGameViewModel2.setTitle("Halo I");
-//        savedGameViewModel2.setEsrbRating("E10+");
-//        savedGameViewModel2.setDescription("Puzzles and Math");
-//        savedGameViewModel2.setPrice(new BigDecimal("23.99"));
-//        savedGameViewModel2.setStudio("Xbox Game Studios");
-//        savedGameViewModel2.setQuantity(5);
-//        savedGameViewModel2.setId(51);
-//
-//        GameViewModel savedGameViewModel3 = new GameViewModel();
-//        savedGameViewModel3.setTitle("Halo IV");
-//        savedGameViewModel3.setEsrbRating("E10+");
-//        savedGameViewModel3.setDescription("Puzzles and Math");
-//        savedGameViewModel3.setPrice(new BigDecimal("23.99"));
-//        savedGameViewModel3.setStudio("Xbox Game Studios");
-//        savedGameViewModel3.setQuantity(5);
-//        savedGameViewModel3.setId(77);
-//
-//        List<GameViewModel> foundList = new ArrayList();
-//        foundList.add(savedGameViewModel1);
-//
-//        outputJson = mapper.writeValueAsString(foundList);
-//
-//        //Mock call to service layer...
-//        when(storeServiceLayer.getGameByTitle("Halo")).thenReturn(foundList);
-//
-//        //Act & Assert
-//        this.mockMvc.perform(get("/game/title/Halo"))
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(content().json(outputJson));
-//
-//        //Mock call to service layer...
-//        when(storeServiceLayer.getGameByTitle("not there")).thenReturn(null);
-//
-//        //Act & Assert
-//        this.mockMvc.perform(get("/game/title/{title}}","not there"))
-//                .andDo(print())
-//                .andExpect(status().isNotFound());
-//    }
+        //Act & Assert
+        this.mockMvc.perform(get("/game/title/{title}", "Halo"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json(outputJson));
+
+        //Act & Assert
+        this.mockMvc.perform(get("/game/title/{title}}","not there"))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
 //
 //    @Test
 //    public void shouldGetGamesByEsrbRating() throws Exception{
