@@ -104,6 +104,10 @@ public class ConsoleControllerTest {
         //So we are mocking (not executing the service layer) since we are testing the controller here.
         //Remember: we are testing the code of the CONTROLLER methods.
         doNothing().when(consoleService).updateConsole(updateConsole);
+
+        //So we are mocking (not executing the service layer) since we are testing the controller here.
+        //Remember: we are testing the code of the CONTROLLER methods.
+        doNothing().when(consoleService).deleteConsole(15);
     }
 
 
@@ -164,19 +168,16 @@ public class ConsoleControllerTest {
                 .andDo(print()) //for debugging purposes. Prints the request, handler,... and response objects to the console below.
                 .andExpect(status().isNotFound()); //Expected response status code.
     }
-//
-//    @org.junit.Test
-//    public void shouldDeleteConsoleReturnNoContent() throws Exception{
-//        //So we are mocking (not executing the service layer) since we are testing the controller here.
-//        //Remember: we are testing the code of the CONTROLLER methods.
-//        doNothing().when(storeServiceLayer).deleteConsole(15);
-//
-//        mockMvc.perform(
-//                        MockMvcRequestBuilders.delete("/console/{id}",15))
-//                .andDo(print())
-//                .andExpect(status().isNoContent()); //Expected response status code.
-//    }
-//
+
+    @Test
+    public void shouldDeleteConsoleReturnNoContent() throws Exception{
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders.delete("/console/{id}",15))
+                .andDo(print())
+                .andExpect(status().isNoContent()); //Expected response status code.
+    }
+
 //    @org.junit.Test
 //    public void shouldReturnConsoleByManufacturer() throws Exception {
 //
