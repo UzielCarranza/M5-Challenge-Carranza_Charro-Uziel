@@ -134,6 +134,10 @@ public class ConsoleControllerTest {
         //So we are mocking (not executing the service layer) since we are testing the controller here.
         //Remember: we are testing the methodse in the CONTROLLER.
         when(consoleService.getConsoleByManufacturer("Sony")).thenReturn(consoleViewModelList);
+
+        //So we are mocking (not executing the service layer) since we are testing the controller here.
+        //Remember: we are testing the methodse in the CONTROLLER.
+        when(consoleService.getAllConsoles()).thenReturn(consoleViewModelList);
     }
 
 
@@ -213,57 +217,26 @@ public class ConsoleControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(consoleViewModelList)));
     }
-//
-//    @org.junit.Test
-//    public void shouldReturnAllConsoles() throws Exception {
-//
-//        List<ConsoleViewModel> consoleViewModelList = new ArrayList<>();
-//
-//        //Mock a list of Consoles...
-//
-//        //1st Console...
-//        ConsoleViewModel outConsole1 = new ConsoleViewModel();
-//        outConsole1.setMemoryAmount("250GB");
-//        outConsole1.setQuantity(12);
-//        outConsole1.setManufacturer("Sony");
-//        outConsole1.setModel("PS4");
-//        outConsole1.setProcessor("AMD");
-//        outConsole1.setPrice(new BigDecimal("499.89"));
-//        outConsole1.setId(15);
-//
-//        consoleViewModelList.add(outConsole1);
-//
-//        //2nd Console...
-//        outConsole1 = new ConsoleViewModel();
-//        outConsole1.setMemoryAmount("200GB");
-//        outConsole1.setQuantity(12);
-//        outConsole1.setManufacturer("Sony");
-//        outConsole1.setModel("PS2");
-//        outConsole1.setProcessor("AMD");
-//        outConsole1.setPrice(new BigDecimal("249.99"));
-//        outConsole1.setId(16);
-//
-//        consoleViewModelList.add(outConsole1);
-//
-//        //So we are mocking (not executing the service layer) since we are testing the controller here.
-//        //Remember: we are testing the methodse in the CONTROLLER.
-//        when(storeServiceLayer.getAllConsoles()).thenReturn(consoleViewModelList);
-//
-//        mockMvc.perform( MockMvcRequestBuilders
-//                        .get("/console")
-//                        .accept(MediaType.APPLICATION_JSON))
-//                .andDo(print()) //for debugging purposes. Prints the request, handler,... and response objects to the console below.
-//                .andExpect(status().isOk())
-//                .andExpect(content().json(mapper.writeValueAsString(consoleViewModelList)));
-//
-//        when(storeServiceLayer.getAllConsoles()).thenReturn(null);
-//
-//        mockMvc.perform( MockMvcRequestBuilders
-//                        .get("/console")
-//                        .accept(MediaType.APPLICATION_JSON))
-//                .andDo(print()) //for debugging purposes. Prints the request, handler,... and response objects to the console below.
-//                .andExpect(status().isNotFound());
-//    }
+
+    @Test
+    public void shouldReturnAllConsoles() throws Exception {
+
+
+        mockMvc.perform( MockMvcRequestBuilders
+                        .get("/console")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print()) //for debugging purposes. Prints the request, handler,... and response objects to the console below.
+                .andExpect(status().isOk())
+                .andExpect(content().json(mapper.writeValueAsString(consoleViewModelList)));
+
+        when(consoleService.getAllConsoles()).thenReturn(null);
+
+        mockMvc.perform( MockMvcRequestBuilders
+                        .get("/console")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print()) //for debugging purposes. Prints the request, handler,... and response objects to the console below.
+                .andExpect(status().isNotFound());
+    }
 //
 //    //Testing bad cases...
 //
