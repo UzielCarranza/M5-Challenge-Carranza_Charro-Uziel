@@ -92,37 +92,27 @@ public class GameControllerTest {
                 .andExpect(content().json(outputJson));
     }
 
-//    @Test
-//    public void shouldReturnGameInfo() throws Exception{
-//
-//        //Object to JSON in String
-//        String outputJson = null;
-//
-//        //Arrange
-//        GameViewModel gameViewModel = new GameViewModel();
-//        gameViewModel.setTitle("Halo");
-//        gameViewModel.setEsrbRating("E10+");
-//        gameViewModel.setDescription("Puzzles and Math");
-//        gameViewModel.setPrice(new BigDecimal("23.99"));
-//        gameViewModel.setStudio("Xbox Game Studios");
-//        gameViewModel.setQuantity(5);
-//        gameViewModel.setId(8);
-//
-//        outputJson = mapper.writeValueAsString(gameViewModel);
-//
-//        // Mocking DAO response
-//        // This is another way to mock using mockito
-//        // same as doReturn(gameViewModel).when(storeServiceLayer).getGame(8);
-//        // We could also set up our mocks in a separate method, if we so chose
-//        when(storeServiceLayer.getGame(8)).thenReturn(gameViewModel);
-//
-//        //Act & Assert
-//        this.mockMvc.perform(get("/game/8"))
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                //use the objectmapper output with the json method
-//                .andExpect(content().json(outputJson));
-//    }
+    @Test
+    public void shouldReturnGameInfo() throws Exception{
+
+        //Arrange
+        inGameViewModel.setId(8);
+
+        outputJson = mapper.writeValueAsString(inGameViewModel);
+
+        // Mocking DAO response
+        // This is another way to mock using mockito
+        // same as doReturn(gameViewModel).when(storeServiceLayer).getGame(8);
+        // We could also set up our mocks in a separate method, if we so chose
+        when(storeServiceLayer.getGame(8)).thenReturn(inGameViewModel);
+
+        //Act & Assert
+        this.mockMvc.perform(get("/game/8"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                //use the objectmapper output with the json method
+                .andExpect(content().json(outputJson));
+    }
 //
 //    @Test
 //    public void shouldFailGetGameBadIdReturns404() throws Exception {
