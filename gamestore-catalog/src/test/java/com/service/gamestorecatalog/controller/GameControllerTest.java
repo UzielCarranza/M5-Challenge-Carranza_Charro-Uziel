@@ -107,6 +107,10 @@ public class GameControllerTest {
 
         when(storeServiceLayer.getGameByTitle("not there")).thenReturn(null);
 
+        when(storeServiceLayer.getGameByEsrb("10+")).thenReturn(foundList);
+
+        when(storeServiceLayer.getGameByEsrb("not there")).thenReturn(null);
+
     }
 
     @Test
@@ -202,63 +206,24 @@ public class GameControllerTest {
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
-//
-//    @Test
-//    public void shouldGetGamesByEsrbRating() throws Exception{
-//        //Object to JSON in String
-//        String outputJson = null;
-//
-//        //Arrange
-//        GameViewModel savedGameViewModel1 = new GameViewModel();
-//        savedGameViewModel1.setTitle("Halo");
-//        savedGameViewModel1.setEsrbRating("E10+");
-//        savedGameViewModel1.setDescription("Puzzles and Math");
-//        savedGameViewModel1.setPrice(new BigDecimal("23.99"));
-//        savedGameViewModel1.setStudio("Xbox Game Studios");
-//        savedGameViewModel1.setQuantity(5);
-//        savedGameViewModel1.setId(56);
-//
-//        GameViewModel savedGameViewModel2 = new GameViewModel();
-//        savedGameViewModel2.setTitle("Halo I");
-//        savedGameViewModel2.setEsrbRating("E10+");
-//        savedGameViewModel2.setDescription("Puzzles and Math");
-//        savedGameViewModel2.setPrice(new BigDecimal("23.99"));
-//        savedGameViewModel2.setStudio("Xbox Game Studios");
-//        savedGameViewModel2.setQuantity(5);
-//        savedGameViewModel2.setId(51);
-//
-//        GameViewModel savedGameViewModel3 = new GameViewModel();
-//        savedGameViewModel3.setTitle("Halo IV");
-//        savedGameViewModel3.setEsrbRating("E18+");
-//        savedGameViewModel3.setDescription("Puzzles and Math");
-//        savedGameViewModel3.setPrice(new BigDecimal("23.99"));
-//        savedGameViewModel3.setStudio("Xbox Game Studios");
-//        savedGameViewModel3.setQuantity(5);
-//        savedGameViewModel3.setId(77);
-//
-//        List<GameViewModel> foundList = new ArrayList();
-//        foundList.add(savedGameViewModel1);
-//        foundList.add(savedGameViewModel2);
-//
-//        outputJson = mapper.writeValueAsString(foundList);
-//
-//        //Mock call to service layer...
-//        when(storeServiceLayer.getGameByEsrb("10+")).thenReturn(foundList);
-//
-//        //Act & Assert
-//        this.mockMvc.perform(get("/game/esrbrating/10+"))
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(content().json(outputJson));
-//
-//        //Mock call to service layer...
-//        when(storeServiceLayer.getGameByEsrb("not there")).thenReturn(null);
-//
-//        //Act & Assert
-//        this.mockMvc.perform(get("/game/esrbrating/{esrb}", "not there"))
-//                .andDo(print())
-//                .andExpect(status().isNotFound());
-//    }
+
+    @Test
+    public void shouldGetGamesByEsrbRating() throws Exception{
+
+        foundList.add(savedGameViewModel2);
+        outputJson = mapper.writeValueAsString(foundList);
+
+        //Act & Assert
+        this.mockMvc.perform(get("/game/esrbrating/10+"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json(outputJson));
+
+        //Act & Assert
+        this.mockMvc.perform(get("/game/esrbrating/{esrb}", "not there"))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
 
 //    @Test
 //    public void shouldGetGamesByStudio() throws Exception{
