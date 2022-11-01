@@ -412,7 +412,7 @@ public class ConsoleControllerTest {
         //the following mocks the service layer's method "createConsoleViewModel"
         //So we are mocking (not executing the service layer) since we are testing the controller here.
         // Remember: we are testing the code of the CONTROLLER methods.
-        doNothing().when(this.consoleService).updateConsole(inConsole);
+        doNothing().when(this.consoleService).updateConsole(updateConsole);
 
         mockMvc.perform(
                         MockMvcRequestBuilders.put("/console")
@@ -434,75 +434,51 @@ public class ConsoleControllerTest {
                 .andExpect(status().isUnprocessableEntity()) //Expected response status code.
         ;
     }
-//
-//    @org.junit.Test
-//    public void shouldFailUpdateConsoleInvalidPrice() throws Exception {
-//
-//        //perform the call, pass argutments (path variables & requestBody), use objectMapper to convert objects
-//        // from/to JSON format.
-//
-//        //Mock "in"coming Console  with null price
-//        ConsoleViewModel inConsole = new ConsoleViewModel();
-//        inConsole.setMemoryAmount("250GB");
-//        inConsole.setQuantity(2);
-//        inConsole.setManufacturer("Sega");
-//        inConsole.setModel("Nintendo");
-//        inConsole.setProcessor("AMD");
-//        inConsole.setPrice(null);
-//        inConsole.setId(15);
-//
-//        //the following mocks the service layer's method "createConsoleViewModel"
-//        //So we are mocking (not executing the service layer) since we are testing the controller here.
-//        // Remember: we are testing the code of the CONTROLLER methods.
-//        doNothing().when(this.storeServiceLayer).updateConsole(inConsole);
-//
-//        //ResultActions x = mockMvc.perform(
-//        mockMvc.perform(
-//                        MockMvcRequestBuilders.put("/console")
-//                                .content(mapper.writeValueAsString(inConsole)) //converts object to JSON and places into RequestBody
-//                                .contentType(MediaType.APPLICATION_JSON))
-//                .andDo(print()) //for debugging purposes. Prints the request, handler,... and response objects to the console below.
-//                .andExpect(status().isUnprocessableEntity()) //Expected response status code.
-//        ;
-//
-//        //Mock "in"coming Console  with no price
-//        inConsole = new ConsoleViewModel();
-//        inConsole.setMemoryAmount("250GB");
-//        inConsole.setQuantity(2);
-//        inConsole.setManufacturer("Sega");
-//        inConsole.setModel("Nintendo");
-//        inConsole.setProcessor("AMD");
-//        inConsole.setPrice(new BigDecimal("1000.00"));
-//        inConsole.setId(15);
-//
-//        //ResultActions x = mockMvc.perform(
-//        mockMvc.perform(
-//                        MockMvcRequestBuilders.put("/console")
-//                                .content(mapper.writeValueAsString(inConsole)) //converts object to JSON and places into RequestBody
-//                                .contentType(MediaType.APPLICATION_JSON))
-//                .andDo(print()) //for debugging purposes. Prints the request, handler,... and response objects to the console below.
-//                .andExpect(status().isUnprocessableEntity()) //Expected response status code.
-//        ;
-//
-//        //Mock "in"coming Console  with no price
-//        inConsole = new ConsoleViewModel();
-//        inConsole.setMemoryAmount("250GB");
-//        inConsole.setQuantity(2);
-//        inConsole.setManufacturer("Sega");
-//        inConsole.setModel("Nintendo");
-//        inConsole.setProcessor("AMD");
-//        inConsole.setPrice(BigDecimal.ZERO);
-//        inConsole.setId(15);
-//
-//        //ResultActions x = mockMvc.perform(
-//        mockMvc.perform(
-//                        MockMvcRequestBuilders.put("/console")
-//                                .content(mapper.writeValueAsString(inConsole)) //converts object to JSON and places into RequestBody
-//                                .contentType(MediaType.APPLICATION_JSON))
-//                .andDo(print()) //for debugging purposes. Prints the request, handler,... and response objects to the console below.
-//                .andExpect(status().isUnprocessableEntity()) //Expected response status code.
-//        ;
-//    }
+
+    @Test
+    public void shouldFailUpdateConsoleInvalidPrice() throws Exception {
+
+        //Mock "in"coming Console  with null price
+        updateConsole.setPrice(null);
+
+        //the following mocks the service layer's method "createConsoleViewModel"
+        //So we are mocking (not executing the service layer) since we are testing the controller here.
+        // Remember: we are testing the code of the CONTROLLER methods.
+        doNothing().when(this.consoleService).updateConsole(updateConsole);
+
+        //ResultActions x = mockMvc.perform(
+        mockMvc.perform(
+                        MockMvcRequestBuilders.put("/console")
+                                .content(mapper.writeValueAsString(updateConsole)) //converts object to JSON and places into RequestBody
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print()) //for debugging purposes. Prints the request, handler,... and response objects to the console below.
+                .andExpect(status().isUnprocessableEntity()) //Expected response status code.
+        ;
+
+        //Mock "in"coming Console  with price exceeding 999.99
+        updateConsole.setPrice(new BigDecimal("10000.00"));
+
+        //ResultActions x = mockMvc.perform(
+        mockMvc.perform(
+                        MockMvcRequestBuilders.put("/console")
+                                .content(mapper.writeValueAsString(updateConsole)) //converts object to JSON and places into RequestBody
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print()) //for debugging purposes. Prints the request, handler,... and response objects to the console below.
+                .andExpect(status().isUnprocessableEntity()) //Expected response status code.
+        ;
+
+        //Mock "in"coming Console  with no price
+        updateConsole.setPrice(BigDecimal.ZERO);
+
+        //ResultActions x = mockMvc.perform(
+        mockMvc.perform(
+                        MockMvcRequestBuilders.put("/console")
+                                .content(mapper.writeValueAsString(updateConsole)) //converts object to JSON and places into RequestBody
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print()) //for debugging purposes. Prints the request, handler,... and response objects to the console below.
+                .andExpect(status().isUnprocessableEntity()) //Expected response status code.
+        ;
+    }
 //
 //    @org.junit.Test
 //    public void shouldFailUpdateConsoleInvalidManufacturer() throws Exception {
