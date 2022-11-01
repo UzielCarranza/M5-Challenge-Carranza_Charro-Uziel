@@ -17,6 +17,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -47,6 +49,9 @@ public class ConsoleControllerTest {
     private ConsoleViewModel inConsole;
     private ConsoleViewModel outConsole;
     private ConsoleViewModel updateConsole;
+    private List<ConsoleViewModel> consoleViewModelList;
+    private ConsoleViewModel outConsole2 = new ConsoleViewModel();
+    ;
 
     @Before
     public void setUp() {
@@ -86,6 +91,24 @@ public class ConsoleControllerTest {
         updateConsole.setId(15);
 
 
+        //Mock a list of Consoles...
+        consoleViewModelList = new ArrayList<>();
+        //1st Console...
+
+        consoleViewModelList.add(outConsole);
+
+        //2nd Console...
+        outConsole2 = new ConsoleViewModel();
+        outConsole2.setMemoryAmount("200GB");
+        outConsole2.setQuantity(12);
+        outConsole2.setManufacturer("Sony");
+        outConsole2.setModel("PS2");
+        outConsole2.setProcessor("AMD");
+        outConsole2.setPrice(new BigDecimal("249.99"));
+        outConsole2.setId(16);
+        consoleViewModelList.add(outConsole2);
+
+
         // the following mocks the service layer's method "createConsoleViewModel"
         // So we are mocking (not executing the service layer) since we are testing the controller here.
         // Remember: we are testing the code of the CONTROLLER methods.
@@ -99,7 +122,6 @@ public class ConsoleControllerTest {
         when(consoleService.getConsoleById(15)).thenReturn(outConsole);
 
 
-
 //      shouldReturn204StatusWithGoodUpdate test case uses it
         //So we are mocking (not executing the service layer) since we are testing the controller here.
         //Remember: we are testing the code of the CONTROLLER methods.
@@ -108,6 +130,10 @@ public class ConsoleControllerTest {
         //So we are mocking (not executing the service layer) since we are testing the controller here.
         //Remember: we are testing the code of the CONTROLLER methods.
         doNothing().when(consoleService).deleteConsole(15);
+
+        //So we are mocking (not executing the service layer) since we are testing the controller here.
+        //Remember: we are testing the methodse in the CONTROLLER.
+        when(consoleService.getConsoleByManufacturer("Sony")).thenReturn(consoleViewModelList);
     }
 
 
@@ -125,12 +151,12 @@ public class ConsoleControllerTest {
     }
 
     @Test
-    public void shouldReturnConsoleById() throws Exception{
+    public void shouldReturnConsoleById() throws Exception {
 
         // Note the way we're passing argument in the Get...
         // Note how to expect a certain value in the returned JSON object.
         //Act & Assert
-        mockMvc.perform( MockMvcRequestBuilders
+        mockMvc.perform(MockMvcRequestBuilders
                         .get("/console/{id}", 15)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print()) //for debugging purposes. Prints the request, handler,... and response objects to the console below.
@@ -158,7 +184,6 @@ public class ConsoleControllerTest {
         doThrow(new IllegalArgumentException("Console not found. Unable to update")).when(consoleService).updateConsole(updateConsole);
 
 
-
 //        ARRANGE
         updateConsole.setId(0);//<--pretend this is a bad id that does not match any existing Console...
         mockMvc.perform(
@@ -170,56 +195,24 @@ public class ConsoleControllerTest {
     }
 
     @Test
-    public void shouldDeleteConsoleReturnNoContent() throws Exception{
+    public void shouldDeleteConsoleReturnNoContent() throws Exception {
 
         mockMvc.perform(
-                        MockMvcRequestBuilders.delete("/console/{id}",15))
+                        MockMvcRequestBuilders.delete("/console/{id}", 15))
                 .andDo(print())
                 .andExpect(status().isNoContent()); //Expected response status code.
     }
 
-//    @org.junit.Test
-//    public void shouldReturnConsoleByManufacturer() throws Exception {
-//
-//        List<ConsoleViewModel> consoleViewModelList = new ArrayList<>();
-//
-//        //Mock a list of Consoles...
-//
-//        //1st Console...
-//        ConsoleViewModel outConsole1 = new ConsoleViewModel();
-//        outConsole1.setMemoryAmount("250GB");
-//        outConsole1.setQuantity(12);
-//        outConsole1.setManufacturer("Sony");
-//        outConsole1.setModel("PS4");
-//        outConsole1.setProcessor("AMD");
-//        outConsole1.setPrice(new BigDecimal("499.89"));
-//        outConsole1.setId(15);
-//
-//        consoleViewModelList.add(outConsole1);
-//
-//        //2nd Console...
-//        outConsole1 = new ConsoleViewModel();
-//        outConsole1.setMemoryAmount("200GB");
-//        outConsole1.setQuantity(12);
-//        outConsole1.setManufacturer("Sony");
-//        outConsole1.setModel("PS2");
-//        outConsole1.setProcessor("AMD");
-//        outConsole1.setPrice(new BigDecimal("249.99"));
-//        outConsole1.setId(16);
-//
-//        consoleViewModelList.add(outConsole1);
-//
-//        //So we are mocking (not executing the service layer) since we are testing the controller here.
-//        //Remember: we are testing the methodse in the CONTROLLER.
-//        when(storeServiceLayer.getConsoleByManufacturer("Sony")).thenReturn(consoleViewModelList);
-//
-//        mockMvc.perform( MockMvcRequestBuilders
-//                        .get("/console/manufacturer/{manufacturer}", "Sony")
-//                        .accept(MediaType.APPLICATION_JSON))
-//                .andDo(print()) //for debugging purposes. Prints the request, handler,... and response objects to the console below.
-//                .andExpect(status().isOk())
-//                .andExpect(content().json(mapper.writeValueAsString(consoleViewModelList)));
-//    }
+    @Test
+    public void shouldReturnConsoleByManufacturer() throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/console/manufacturer/{manufacturer}", "Sony")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print()) //for debugging purposes. Prints the request, handler,... and response objects to the console below.
+                .andExpect(status().isOk())
+                .andExpect(content().json(mapper.writeValueAsString(consoleViewModelList)));
+    }
 //
 //    @org.junit.Test
 //    public void shouldReturnAllConsoles() throws Exception {
