@@ -1,6 +1,5 @@
 package com.service.gamestorecatalog.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.service.gamestorecatalog.service.GameService;
 import com.service.gamestorecatalog.viewModel.GameViewModel;
@@ -51,8 +50,9 @@ public class GameControllerTest {
     private GameViewModel inGameViewModel;
     private GameViewModel savedGameViewModel;
     private GameViewModel savedGameViewModel2;
+    private GameViewModel savedGameViewModel3;
 
-   private List<GameViewModel> foundList;
+    private List<GameViewModel> foundList;
 
     @Before
     public void setUp() throws Exception {
@@ -89,7 +89,17 @@ public class GameControllerTest {
         savedGameViewModel2.setPrice(new BigDecimal("23.99"));
         savedGameViewModel2.setStudio("Xbox Game Studios");
         savedGameViewModel2.setQuantity(5);
-        savedGameViewModel2.setId(51);
+        savedGameViewModel2.setId(52);
+
+        //Arrange
+        savedGameViewModel3 = new GameViewModel();
+        savedGameViewModel3.setTitle("Halo");
+        savedGameViewModel3.setEsrbRating("E10+");
+        savedGameViewModel3.setDescription("Puzzles and Math");
+        savedGameViewModel3.setPrice(new BigDecimal("23.99"));
+        savedGameViewModel3.setStudio("A&E");
+        savedGameViewModel3.setQuantity(5);
+        savedGameViewModel3.setId(56);
 
         foundList = new ArrayList();
         foundList.add(savedGameViewModel);
@@ -126,7 +136,7 @@ public class GameControllerTest {
     }
 
     @Test
-    public void shouldReturnGameInfo() throws Exception{
+    public void shouldReturnGameInfo() throws Exception {
 
         //Arrange
         inGameViewModel.setId(8);
@@ -154,7 +164,7 @@ public class GameControllerTest {
     }
 
     @Test
-    public void shouldUpdateGame() throws Exception{
+    public void shouldUpdateGame() throws Exception {
 
         //Arrange
         inGameViewModel.setId(1);
@@ -167,14 +177,14 @@ public class GameControllerTest {
 
         //Act & Assert
         this.mockMvc.perform(put("/game")
-                .content(inputJson)
-                .contentType(MediaType.APPLICATION_JSON))
+                        .content(inputJson)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isNoContent());
     }
 
     @Test
-    public void shouldDeleteGame() throws Exception{
+    public void shouldDeleteGame() throws Exception {
 
         //Arrange
         inGameViewModel.setId(62);
@@ -191,7 +201,7 @@ public class GameControllerTest {
     }
 
     @Test
-    public void shouldGetGamesByTitle() throws Exception{
+    public void shouldGetGamesByTitle() throws Exception {
 
         outputJson = mapper.writeValueAsString(foundList);
 //
@@ -202,13 +212,13 @@ public class GameControllerTest {
                 .andExpect(content().json(outputJson));
 
         //Act & Assert
-        this.mockMvc.perform(get("/game/title/{title}}","not there"))
+        this.mockMvc.perform(get("/game/title/{title}}", "not there"))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
 
     @Test
-    public void shouldGetGamesByEsrbRating() throws Exception{
+    public void shouldGetGamesByEsrbRating() throws Exception {
 
         foundList.add(savedGameViewModel2);
         outputJson = mapper.writeValueAsString(foundList);
@@ -225,62 +235,30 @@ public class GameControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-//    @Test
-//    public void shouldGetGamesByStudio() throws Exception{
-//        //Object to JSON in String
-//        String outputJson = null;
+    @Test
+    public void shouldGetGamesByStudio() throws Exception {
+
+        foundList.add(savedGameViewModel2);
+
+        outputJson = mapper.writeValueAsString(foundList);
+
+        //Mock call to service layer...
+        when(storeServiceLayer.getGameByStudio("Xbox Game Studios")).thenReturn(foundList);
+
+        //Act & Assert
+        this.mockMvc.perform(get("/game/studio/Xbox Game Studios"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json(outputJson));
 //
-//        //Arrange
-//        GameViewModel savedGameViewModel1 = new GameViewModel();
-//        savedGameViewModel1.setTitle("Halo");
-//        savedGameViewModel1.setEsrbRating("E10+");
-//        savedGameViewModel1.setDescription("Puzzles and Math");
-//        savedGameViewModel1.setPrice(new BigDecimal("23.99"));
-//        savedGameViewModel1.setStudio("A&E");
-//        savedGameViewModel1.setQuantity(5);
-//        savedGameViewModel1.setId(56);
-//
-//        GameViewModel savedGameViewModel2 = new GameViewModel();
-//        savedGameViewModel2.setTitle("Halo I");
-//        savedGameViewModel2.setEsrbRating("E10+");
-//        savedGameViewModel2.setDescription("Puzzles and Math");
-//        savedGameViewModel2.setPrice(new BigDecimal("23.99"));
-//        savedGameViewModel2.setStudio("Xbox Game Studios");
-//        savedGameViewModel2.setQuantity(5);
-//        savedGameViewModel2.setId(51);
-//
-//        GameViewModel savedGameViewModel3 = new GameViewModel();
-//        savedGameViewModel3.setTitle("Halo IV");
-//        savedGameViewModel3.setEsrbRating("E18+");
-//        savedGameViewModel3.setDescription("Puzzles and Math");
-//        savedGameViewModel3.setPrice(new BigDecimal("23.99"));
-//        savedGameViewModel3.setStudio("A&E");
-//        savedGameViewModel3.setQuantity(5);
-//        savedGameViewModel3.setId(77);
-//
-//        List<GameViewModel> foundList = new ArrayList();
-//        foundList.add(savedGameViewModel1);
-//        foundList.add(savedGameViewModel3);
-//
-//        outputJson = mapper.writeValueAsString(foundList);
-//
-//        //Mock call to service layer...
-//        when(storeServiceLayer.getGameByStudio("A&E")).thenReturn(foundList);
-//
-//        //Act & Assert
-//        this.mockMvc.perform(get("/game/studio/A&E"))
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(content().json(outputJson));
-//
-//        //Mock call to service layer...
-//        when(storeServiceLayer.getGameByStudio("not there")).thenReturn(null);
-//
-//        //Act & Assert
-//        this.mockMvc.perform(get("/game/studio/{A&E}","not there"))
-//                .andDo(print())
-//                .andExpect(status().isNotFound());
-//    }
+        //Mock call to service layer...
+        when(storeServiceLayer.getGameByStudio("not there")).thenReturn(null);
+
+        //Act & Assert
+        this.mockMvc.perform(get("/game/studio/{A&E}", "not there"))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
 //
 //    @Test
 //    public void shouldGetAllGames() throws Exception{
