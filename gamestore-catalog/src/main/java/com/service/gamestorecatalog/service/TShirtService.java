@@ -44,11 +44,11 @@ public class TShirtService {
     }
 
     public TShirtViewModel getTShirt(long id) {
-        Optional<TShirt> tShirt = tShirtRepo.findById(id);
+        TShirt tShirt = tShirtRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("No ID Present"));;
         if (tShirt == null)
             return null;
         else
-            return buildTShirtViewModel(tShirt.get());
+            return buildTShirtViewModel(tShirt);
     }
 
     public void updateTShirt(TShirtViewModel tShirtViewModel) {

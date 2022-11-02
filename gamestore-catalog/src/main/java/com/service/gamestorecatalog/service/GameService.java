@@ -41,11 +41,11 @@ public class GameService {
     }
 
     public GameViewModel getGame(long id) {
-        Optional<Game> game = gameRepo.findById(id);
+        Game game = gameRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("No ID Present"));;
         if (game == null)
             return null;
         else
-            return buildGameViewModel(game.get());
+            return buildGameViewModel(game);
     }
 
     public void updateGame(GameViewModel gameViewModel) {

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 
@@ -42,11 +43,11 @@ public class ConsoleService {
     }
 
     public ConsoleViewModel getConsoleById(long id) {
-        Optional<Console> console = consoleRepo.findById(id);
+        Console console = consoleRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("No ID Present"));
         if (console == null)
             return null;
         else
-            return buildConsoleViewModel(console.get());
+            return buildConsoleViewModel(console);
     }
 
     public void updateConsole(ConsoleViewModel consoleViewModel) {
