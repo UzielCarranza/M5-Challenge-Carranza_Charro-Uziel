@@ -160,14 +160,9 @@ public class GameStoreInvoiceServiceLayerTest {
 
     @Test(expected = NullPointerException.class)
     public void shouldFailWhenCreateInvoiceInvalidInvoiceMV() {
-        TShirt tShirt = new TShirt();
-        tShirt.setSize("Medium");
-        tShirt.setColor("Blue");
-        tShirt.setDescription("V-Neck");
-        tShirt.setPrice(new BigDecimal("19.99"));
-        tShirt.setQuantity(5);
-
-        InvoiceViewModel invoiceViewModel = null;
+//        ACT
+//        INVOICE VIEW MODEL IS INSTANTIATED ON setUpInvoiceRepositoryMock()
+        invoiceViewModel = null;
 
         invoiceViewModel = service.createInvoice(invoiceViewModel);
     }
