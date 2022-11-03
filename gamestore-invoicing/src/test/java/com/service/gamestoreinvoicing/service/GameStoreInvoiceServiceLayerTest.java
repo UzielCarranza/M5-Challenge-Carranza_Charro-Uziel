@@ -102,33 +102,23 @@ public class GameStoreInvoiceServiceLayerTest {
 
         InvoiceViewModel ivmfromService = service.getInvoice(invoiceViewModel.getId());
 
+//        ASSERT
         assertEquals(invoiceViewModel, ivmfromService);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldFailCreateFindInvoiceWithBadItemType() {
-        TShirt tShirt = new TShirt();
-        tShirt.setSize("Medium");
-        tShirt.setColor("Blue");
-        tShirt.setDescription("V-Neck");
-        tShirt.setPrice(new BigDecimal("19.99"));
-        tShirt.setQuantity(5);
-        InvoiceViewModel invoiceViewModel = new InvoiceViewModel();
-        invoiceViewModel.setName("John Jake");
-        invoiceViewModel.setStreet("street");
-        invoiceViewModel.setCity("Charlotte");
-        invoiceViewModel.setState("NC");
-        invoiceViewModel.setZipcode("83749");
+
+//        ACT
+//        INVOICE VIEW MODEL IS INSTANTIATED ON setUpInvoiceRepositoryMock()
+//        we pass an Item type of a shirt that doesnt exist
         invoiceViewModel.setItemType("Bad Item Type");
-        invoiceViewModel.setItemId(54);
-        invoiceViewModel.setQuantity(2);
 
         invoiceViewModel = service.createInvoice(invoiceViewModel);
-        System.out.println("here");
-        System.out.println(invoiceViewModel);
 
         InvoiceViewModel ivmfromService = service.getInvoice(invoiceViewModel.getId());
 
+//        ASSERT
         assertEquals(invoiceViewModel, ivmfromService);
     }
 
