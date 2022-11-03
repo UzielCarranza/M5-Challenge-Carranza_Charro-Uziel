@@ -19,23 +19,24 @@ public class ProcessingFeeRepositoryTest {
     @Autowired
     ProcessingFeeRepository processingFeeRepository;
 
+    private ProcessingFee tShirtProcessingFee;
+    private ProcessingFee consoleProcessingFee;
+    private ProcessingFee gameProcessingFee;
+
     @org.junit.Before
     public void setUp() throws Exception {
         processingFeeRepository.deleteAll();
-    }
 
-    @Test
-    public void getProcessingFee() {
         // Arrange
-        ProcessingFee tShirtProcessingFee = new ProcessingFee();
+        tShirtProcessingFee = new ProcessingFee();
         tShirtProcessingFee.setProductType("T-Shirts");
         tShirtProcessingFee.setFee(new BigDecimal("1.98"));
 
-        ProcessingFee consoleProcessingFee = new ProcessingFee();
+        consoleProcessingFee = new ProcessingFee();
         consoleProcessingFee.setProductType("Consoles");
         consoleProcessingFee.setFee(new BigDecimal("14.99"));
 
-        ProcessingFee gameProcessingFee = new ProcessingFee();
+        gameProcessingFee = new ProcessingFee();
         gameProcessingFee.setProductType("Games");
         gameProcessingFee.setFee(new BigDecimal("1.49"));
 
@@ -43,6 +44,10 @@ public class ProcessingFeeRepositoryTest {
         processingFeeRepository.save(tShirtProcessingFee);
         processingFeeRepository.save(consoleProcessingFee);
         processingFeeRepository.save(gameProcessingFee);
+    }
+
+    @Test
+    public void getProcessingFee() {
 
         // Assert
         Optional<ProcessingFee> foundFee;
@@ -62,23 +67,6 @@ public class ProcessingFeeRepositoryTest {
 
     @Test
     public void getProcessingFeeObject() {
-        // Arrange
-        ProcessingFee tShirtProcessingFee = new ProcessingFee();
-        tShirtProcessingFee.setProductType("T-Shirts");
-        tShirtProcessingFee.setFee(new BigDecimal("1.98"));
-
-        ProcessingFee consoleProcessingFee = new ProcessingFee();
-        consoleProcessingFee.setProductType("Consoles");
-        consoleProcessingFee.setFee(new BigDecimal("14.99"));
-
-        ProcessingFee gameProcessingFee = new ProcessingFee();
-        gameProcessingFee.setProductType("Games");
-        gameProcessingFee.setFee(new BigDecimal("1.49"));
-
-        // Act
-        processingFeeRepository.save(tShirtProcessingFee);
-        processingFeeRepository.save(consoleProcessingFee);
-        processingFeeRepository.save(gameProcessingFee);
 
         // Assert
         Optional<ProcessingFee> foundProcessingFee = processingFeeRepository.findById(tShirtProcessingFee.getProductType());
@@ -91,6 +79,6 @@ public class ProcessingFeeRepositoryTest {
 
         foundProcessingFee = processingFeeRepository.findById(gameProcessingFee.getProductType());
         assertTrue(foundProcessingFee.isPresent());
-        assertEquals(gameProcessingFee,foundProcessingFee.get());
+        assertEquals(gameProcessingFee, foundProcessingFee.get());
     }
 }
