@@ -124,21 +124,10 @@ public class GameStoreInvoiceServiceLayerTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldFailCreateFindInvoiceWithNoInventory() {
-        TShirt tShirt = new TShirt();
-        tShirt.setSize("Medium");
-        tShirt.setColor("Blue");
-        tShirt.setDescription("V-Neck");
-        tShirt.setPrice(new BigDecimal("19.99"));
-        tShirt.setQuantity(5);
 
-        InvoiceViewModel invoiceViewModel = new InvoiceViewModel();
-        invoiceViewModel.setName("John Jake");
-        invoiceViewModel.setStreet("street");
-        invoiceViewModel.setCity("Charlotte");
-        invoiceViewModel.setState("NC");
-        invoiceViewModel.setZipcode("83749");
-        invoiceViewModel.setItemType("T-Shirt");
-        invoiceViewModel.setItemId(54);
+//        ACT
+//        INVOICE VIEW MODEL IS INSTANTIATED ON setUpInvoiceRepositoryMock()
+//        we pass a buying option to get 6 shirts when there are only 5
         invoiceViewModel.setQuantity(6);
 
         invoiceViewModel = service.createInvoice(invoiceViewModel);
@@ -156,7 +145,6 @@ public class GameStoreInvoiceServiceLayerTest {
         tShirt.setDescription("V-Neck");
         tShirt.setPrice(new BigDecimal("19.99"));
         tShirt.setQuantity(5);
-//        tShirt = service.createTShirt(tShirt);
 
         InvoiceViewModel invoiceViewModel = new InvoiceViewModel();
         invoiceViewModel.setName("John Jake");
