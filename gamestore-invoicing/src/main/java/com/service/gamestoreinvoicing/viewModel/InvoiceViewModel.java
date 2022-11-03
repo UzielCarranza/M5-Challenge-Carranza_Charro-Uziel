@@ -185,4 +185,24 @@ public class InvoiceViewModel {
                 getItemType(), getItemId(), getUnitPrice(), getQuantity(), getSubtotal(), getTax(),
                 getProcessingFee(), getTotal());
     }
+
+    @Override
+    public String toString() {
+        return "InvoiceViewModel{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", street='" + street + '\'' +
+                ", city='" + city + '\'' +
+                ", state='" + state + '\'' +
+                ", zipcode='" + zipcode + '\'' +
+                ", itemType='" + itemType + '\'' +
+                ", itemId=" + itemId +
+                ", unitPrice=" + unitPrice +
+                ", quantity=" + quantity +
+                ", subtotal=" + subtotal +
+                ", tax=" + tax +
+                ", processingFee=" + processingFee +
+                ", total=" + total +
+                '}';
+    }
 }
