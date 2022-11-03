@@ -91,23 +91,12 @@ public class GameStoreInvoiceServiceLayerTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldFailCreateFindInvoiceWithBadState() {
-        TShirt tShirt = new TShirt();
-        tShirt.setId(99);
-        tShirt.setSize("Small");
-        tShirt.setColor("Red");
-        tShirt.setDescription("sleeveless");
-        tShirt.setPrice(new BigDecimal("400"));
-        tShirt.setQuantity(30);
 
-        InvoiceViewModel invoiceViewModel = new InvoiceViewModel();
-        invoiceViewModel.setName("John Jake");
-        invoiceViewModel.setStreet("street");
-        invoiceViewModel.setCity("Charlotte");
-        invoiceViewModel.setState("NY");
-        invoiceViewModel.setZipcode("83749");
-        invoiceViewModel.setItemType("T-Shirt");
+
+//        ACT
+//        INVOICE VIEW MODEL IS INSTANTIATED ON setUpInvoiceRepositoryMock()
+//        we pass an ID of a shirt that doesnt exist
         invoiceViewModel.setItemId(99);
-        invoiceViewModel.setQuantity(2);
 
         invoiceViewModel = service.createInvoice(invoiceViewModel);
 
