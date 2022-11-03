@@ -44,6 +44,8 @@ public class GameStoreInvoiceServiceLayerTest {
 
     private Invoice invoice1;
 
+    private InvoiceViewModel invoiceViewModel;
+
     //    catalog mock
     private TShirt tShirt;
 
@@ -51,10 +53,10 @@ public class GameStoreInvoiceServiceLayerTest {
     @Before
     public void setUp() throws Exception {
 
+        setUpCatalogClientMock();
         setUpInvoiceRepositoryMock();
         setUpProcessingFeeRepositoryMock();
         setUpTaxRepositoryMock();
-        setUpCatalogClientMock();
 
         service = new GameStoreInvoiceServiceLayer(gameStoreCatalogClient,
                 invoiceRepository, taxRepository, processingFeeRepository);
@@ -65,17 +67,8 @@ public class GameStoreInvoiceServiceLayerTest {
     @Test
     public void shouldCreateFindInvoice() {
 
-        InvoiceViewModel invoiceViewModel = new InvoiceViewModel();
-        invoiceViewModel.setName("John Jake");
-        invoiceViewModel.setStreet("street");
-        invoiceViewModel.setCity("Charlotte");
-        invoiceViewModel.setState("NC");
-        invoiceViewModel.setZipcode("83749");
-        invoiceViewModel.setItemType("T-Shirt");
-        invoiceViewModel.setItemId(tShirt.getId());
-        invoiceViewModel.setUnitPrice(tShirt.getPrice());
-        invoiceViewModel.setQuantity(2);
-
+//        ACT
+//        INVOICE VIEW MODEL IS INSTANTIATED ON setUpInvoiceRepositoryMock()
         invoiceViewModel = service.createInvoice(invoiceViewModel);
 
         InvoiceViewModel ivmfromService = service.getInvoice(invoiceViewModel.getId());
@@ -320,6 +313,18 @@ public class GameStoreInvoiceServiceLayerTest {
 
         doReturn(invoice1).when(invoiceRepository).save(invoice);
         doReturn(Optional.of(invoice1)).when(invoiceRepository).findById(20L);
+
+//        INVOICE VIEW MODEL
+        invoiceViewModel = new InvoiceViewModel();
+        invoiceViewModel.setName("John Jake");
+        invoiceViewModel.setStreet("street");
+        invoiceViewModel.setCity("Charlotte");
+        invoiceViewModel.setState("NC");
+        invoiceViewModel.setZipcode("83749");
+        invoiceViewModel.setItemType("T-Shirt");
+        invoiceViewModel.setItemId(tShirt.getId());
+        invoiceViewModel.setUnitPrice(tShirt.getPrice());
+        invoiceViewModel.setQuantity(2);
 
         //Get All...
         Invoice savedInvoice1 = new Invoice();
