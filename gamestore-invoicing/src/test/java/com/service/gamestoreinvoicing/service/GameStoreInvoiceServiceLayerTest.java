@@ -38,12 +38,14 @@ public class GameStoreInvoiceServiceLayerTest {
 
     private TaxRepository taxRepository;
 
-    @MockBean
     private GameStoreInvoiceServiceLayer service;
 
     private Invoice invoice;
 
     private Invoice invoice1;
+
+    //    catalog mock
+    private TShirt tShirt;
 
 
     @Before
@@ -52,6 +54,7 @@ public class GameStoreInvoiceServiceLayerTest {
         setUpInvoiceRepositoryMock();
         setUpProcessingFeeRepositoryMock();
         setUpTaxRepositoryMock();
+        setUpCatalogClientMock();
 
         service = new GameStoreInvoiceServiceLayer(gameStoreCatalogClient,
                 invoiceRepository, taxRepository, processingFeeRepository);
@@ -61,17 +64,6 @@ public class GameStoreInvoiceServiceLayerTest {
     //Testing Invoice Operations...
     @Test
     public void shouldCreateFindInvoice() {
-        TShirt tShirt = new TShirt();
-        tShirt.setSize("Medium");
-        tShirt.setColor("Blue");
-        tShirt.setDescription("V-Neck");
-        tShirt.setPrice(new BigDecimal("19.99"));
-        tShirt.setQuantity(5);
-        tShirt.setId(54);
-
-//        Mock the catalog client, test cases are already incorporated for that database so we can mock the expected return
-        doReturn(tShirt).when(gameStoreCatalogClient).createTShirt(tShirt);
-        tShirt = gameStoreCatalogClient.createTShirt(tShirt);
 
         InvoiceViewModel invoiceViewModel = new InvoiceViewModel();
         invoiceViewModel.setName("John Jake");
@@ -83,9 +75,6 @@ public class GameStoreInvoiceServiceLayerTest {
         invoiceViewModel.setItemId(tShirt.getId());
         invoiceViewModel.setUnitPrice(tShirt.getPrice());
         invoiceViewModel.setQuantity(2);
-
-
-        when(gameStoreCatalogClient.findTShirtById(tShirt.getId())).thenReturn(Optional.of(tShirt));
 
         invoiceViewModel = service.createInvoice(invoiceViewModel);
 
@@ -233,7 +222,8 @@ public class GameStoreInvoiceServiceLayerTest {
         InvoiceViewModel ivmfromService = service.getInvoice(invoiceViewModel.getId());
         assertEquals(invoiceViewModel, ivmfromService);
     }
-//
+
+    //
     @Test(expected = IllegalArgumentException.class)
     public void shouldFailWhenCreateInvoiceInvalidItem() {
         TShirt tShirt = new TShirt();
@@ -416,5 +406,20 @@ public class GameStoreInvoiceServiceLayerTest {
 
     }
 
+    private void setUpCatalogClientMock() {
+
+        tShirt = new TShirt();
+        tShirt.setSize("Medium");
+        tShirt.setColor("Blue");
+        tShirt.setDescription("V-Neck");
+        tShirt.setPrice(new BigDecimal("19.99"));
+        tShirt.setQuantity(5);
+        tShirt.setId(54);
+
+//        Mock the catalog client, test cases are already incorporated for that database so we can mock the expected return
+        doReturn(tShirt).when(gameStoreCatalogClient).createTShirt(tShirt);
+        tShirt = gameStoreCatalogClient.createTShirt(tShirt);
+        when(gameStoreCatalogClient.findTShirtById(tShirt.getId())).thenReturn(Optional.of(tShirt));
+    }
 
 }
