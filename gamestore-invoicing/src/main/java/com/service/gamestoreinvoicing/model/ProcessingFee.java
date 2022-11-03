@@ -49,4 +49,12 @@ public class ProcessingFee {
     public int hashCode() {
         return Objects.hash(getProductType(), getFee());
     }
+
+    @Override
+    public String toString() {
+        return "ProcessingFee{" +
+                "productType='" + productType + '\'' +
+                ", fee=" + fee +
+                '}';
+    }
 }

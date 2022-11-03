@@ -78,4 +78,16 @@ public class TShirt {
     public int hashCode() {
         return Objects.hash(getId(), getSize(), getColor(), getDescription(), getPrice(), getQuantity());
     }
+
+    @Override
+    public String toString() {
+        return "TShirt{" +
+                "id=" + id +
+                ", size='" + size + '\'' +
+                ", color='" + color + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", quantity=" + quantity +
+                '}';
+    }
 }

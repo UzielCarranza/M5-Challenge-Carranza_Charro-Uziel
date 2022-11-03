@@ -55,4 +55,12 @@ public class Tax {
     public int hashCode() {
         return Objects.hash(getState(), getRate());
     }
+
+    @Override
+    public String toString() {
+        return "Tax{" +
+                "state='" + state + '\'' +
+                ", rate=" + rate +
+                '}';
+    }
 }
