@@ -46,6 +46,8 @@ public class GameStoreInvoiceServiceLayerTest {
 
     private InvoiceViewModel invoiceViewModel;
 
+    private List<Invoice> allList;
+
     //    catalog mock
     private TShirt tShirt;
 
@@ -78,62 +80,12 @@ public class GameStoreInvoiceServiceLayerTest {
 
     @Test
     public void shouldFindAllInvoices() {
-        InvoiceViewModel savedInvoice1 = new InvoiceViewModel();
-        savedInvoice1.setName("Sandy Beach");
-        savedInvoice1.setStreet("123 Main St");
-        savedInvoice1.setCity("any City");
-        savedInvoice1.setState("NY");
-        savedInvoice1.setZipcode("10016");
-        savedInvoice1.setItemType("T-Shirt");
-        savedInvoice1.setItemId(12);//pretending item exists with this id...
-        savedInvoice1.setUnitPrice(new BigDecimal("12.50"));//pretending item exists with this price...
-        savedInvoice1.setQuantity(2);
-        savedInvoice1.setSubtotal(savedInvoice1.getUnitPrice().multiply(new BigDecimal(savedInvoice1.getQuantity())));
-        savedInvoice1.setTax(savedInvoice1.getSubtotal().multiply(new BigDecimal("0.06")));
-        savedInvoice1.setProcessingFee(new BigDecimal("10.00"));
-        savedInvoice1.setTotal(savedInvoice1.getSubtotal().add(savedInvoice1.getTax()).add(savedInvoice1.getProcessingFee()));
-        savedInvoice1.setId(22);
 
-        InvoiceViewModel savedInvoice2 = new InvoiceViewModel();
-        savedInvoice2.setName("Rob Bank");
-        savedInvoice2.setStreet("888 Main St");
-        savedInvoice2.setCity("any town");
-        savedInvoice2.setState("NJ");
-        savedInvoice2.setZipcode("08234");
-        savedInvoice2.setItemType("Console");
-        savedInvoice2.setItemId(120);//pretending item exists with this id...
-        savedInvoice2.setUnitPrice(new BigDecimal("129.50"));//pretending item exists with this price...
-        savedInvoice2.setQuantity(1);
-        savedInvoice2.setSubtotal(savedInvoice2.getUnitPrice().multiply(new BigDecimal(savedInvoice2.getQuantity())));
-        savedInvoice2.setTax(savedInvoice2.getSubtotal().multiply(new BigDecimal("0.08")));
-        savedInvoice2.setProcessingFee(new BigDecimal("10.00"));
-        savedInvoice2.setTotal(savedInvoice2.getSubtotal().add(savedInvoice2.getTax()).add(savedInvoice2.getProcessingFee()));
-        savedInvoice2.setId(12);
-
-        InvoiceViewModel savedInvoice3 = new InvoiceViewModel();
-        savedInvoice3.setName("Sandy Beach");
-        savedInvoice3.setStreet("123 Broad St");
-        savedInvoice3.setCity("any where");
-        savedInvoice3.setState("CA");
-        savedInvoice3.setZipcode("90016");
-        savedInvoice3.setItemType("Game");
-        savedInvoice3.setItemId(19);//pretending item exists with this id...
-        savedInvoice3.setUnitPrice(new BigDecimal("12.50"));//pretending item exists with this price...
-        savedInvoice3.setQuantity(4);
-        savedInvoice3.setSubtotal(savedInvoice3.getUnitPrice().multiply(new BigDecimal(savedInvoice3.getQuantity())));
-        savedInvoice3.setTax(savedInvoice3.getSubtotal().multiply(new BigDecimal("0.09")));
-        savedInvoice3.setProcessingFee(BigDecimal.ZERO);
-        savedInvoice3.setTotal(savedInvoice3.getSubtotal().add(savedInvoice3.getTax()).add(savedInvoice3.getProcessingFee()));
-        savedInvoice3.setId(73);
-
-        List<InvoiceViewModel> currInvoices = new ArrayList<>();
-        currInvoices.add(savedInvoice1);
-        currInvoices.add(savedInvoice2);
-        currInvoices.add(savedInvoice3);
-
+//        ACT
         List<InvoiceViewModel> foundAllInvoices = service.getAllInvoices();
 
-        assertEquals(currInvoices.size(), foundAllInvoices.size());
+//        allList is instantiated on METHOD setUpInvoiceRepositoryMock()
+        assertEquals(allList.size(), foundAllInvoices.size());
     }
 
 
@@ -375,7 +327,7 @@ public class GameStoreInvoiceServiceLayerTest {
         savedInvoice3.setTotal(savedInvoice3.getSubtotal().add(savedInvoice3.getTax()).add(savedInvoice3.getProcessingFee()));
         savedInvoice3.setId(73);
 
-        List<Invoice> allList = new ArrayList<>();
+        allList = new ArrayList<>();
         allList.add(savedInvoice1);
         allList.add(savedInvoice2);
         allList.add(savedInvoice3);
